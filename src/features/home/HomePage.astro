@@ -1,0 +1,117 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { getLangFromUrl, useTranslations } from '@i18n/utils';
+import { Image } from 'astro:assets';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Layout title={t('nav.home')}>
+  <!-- Hero Section Scenografica -->
+  <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+    <!-- Immagine di background con zoom delicato css -->
+    <div 
+      class="absolute inset-0 z-0 bg-cover bg-center transition-transform duration-[20s] hover:scale-105"
+      style="background-image: url('https://images.unsplash.com/photo-1549880338-65ddcdfd017b?ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80');"
+    ></div>
+    
+    <!-- Gradiente scuro per migliorare la leggibilità del testo -->
+    <div class="absolute inset-0 z-10 bg-gradient-to-b from-black/60 via-black/30 to-[#F9F9F8]"></div>
+
+    <!-- Contenuto Hero -->
+    <div class="relative z-20 text-center text-white px-4 max-w-4xl mx-auto mt-[-10vh]">
+      <h1 class="text-6xl md:text-8xl font-bold tracking-tighter mb-6 animate-fade-in-up drop-shadow-lg">
+        {t('site.title')}
+      </h1>
+      <p class="text-xl md:text-2xl font-light mb-10 opacity-0 animate-fade-in-up delay-100 drop-shadow-md">
+        Mille anni di storia sospesi sul mare del Golfo.
+      </p>
+      <div class="opacity-0 animate-fade-in-up delay-200">
+        <a href="#esplora" class="btn border-none bg-white/10 hover:bg-white/20 text-white backdrop-blur-md px-10 py-4 h-auto rounded-full text-lg font-medium transition-all duration-300">
+          Inizia l'esplorazione
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Sezione Servizi (Cards Premium) -->
+  <section id="esplora" class="py-24 px-4 md:px-8 max-w-7xl mx-auto relative z-20 -mt-20">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <!-- Card 1: Storia -->
+      <a href={`/${lang}/storia`} class="group block opacity-0 animate-fade-in-up delay-100">
+        <div class="card h-[400px] overflow-hidden rounded-2xl shadow-xl relative cursor-pointer transform transition-transform duration-500 hover:-translate-y-2">
+          <figure class="h-full w-full absolute inset-0">
+            <Image 
+              src="https://images.unsplash.com/photo-1599940824399-b87987ceb72a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+              alt="La Storia" 
+              width={800} height={600} 
+              format="avif"
+              class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" 
+            />
+          </figure>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-8 text-white w-full">
+            <h2 class="text-3xl font-bold mb-2 tracking-tight group-hover:text-[#8C6A4F] transition-colors">La Storia</h2>
+            <p class="text-sm font-light opacity-80 mb-4 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">Esplora le origini medievali del Castello e i suoi segreti.</p>
+            <div class="h-[2px] w-0 bg-[#8C6A4F] group-hover:w-12 transition-all duration-500"></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 2: Eventi -->
+      <a href={`/${lang}/eventi`} class="group block opacity-0 animate-fade-in-up delay-200">
+        <div class="card h-[400px] overflow-hidden rounded-2xl shadow-xl relative cursor-pointer transform transition-transform duration-500 hover:-translate-y-2">
+          <figure class="h-full w-full absolute inset-0">
+            <Image 
+              src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+              alt="Eventi Privati" 
+              width={800} height={600} format="avif"
+              class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" 
+            />
+          </figure>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-8 text-white w-full">
+            <h2 class="text-3xl font-bold mb-2 tracking-tight group-hover:text-[#8C6A4F] transition-colors">Eventi Privati</h2>
+            <p class="text-sm font-light opacity-80 mb-4 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">Una location ineguagliabile per matrimoni e cene di gala.</p>
+            <div class="h-[2px] w-0 bg-[#8C6A4F] group-hover:w-12 transition-all duration-500"></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 3: Bottega -->
+      <a href={`/${lang}/bottega`} class="group block opacity-0 animate-fade-in-up delay-300">
+        <div class="card h-[400px] overflow-hidden rounded-2xl shadow-xl relative cursor-pointer transform transition-transform duration-500 hover:-translate-y-2">
+          <figure class="h-full w-full absolute inset-0">
+            <Image 
+              src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+              alt="La Bottega" 
+              width={800} height={600} format="avif"
+              class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" 
+            />
+          </figure>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-8 text-white w-full">
+            <h2 class="text-3xl font-bold mb-2 tracking-tight group-hover:text-[#8C6A4F] transition-colors">La Bottega</h2>
+            <p class="text-sm font-light opacity-80 mb-4 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">Vini selezionati e artigianato locale, dal Castello a te.</p>
+            <div class="h-[2px] w-0 bg-[#8C6A4F] group-hover:w-12 transition-all duration-500"></div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+  
+  <!-- Sezione Testuale Elegante SEO Friendly -->
+  <section class="py-24 bg-white">
+    <div class="max-w-4xl mx-auto text-center px-4">
+      <h2 class="text-sm tracking-[0.3em] text-[#8C6A4F] uppercase font-semibold mb-4">L'Eccellenza del Territorio</h2>
+      <h3 class="text-4xl font-light mb-8">Un'esperienza immersiva tra mare e storia</h3>
+      <p class="text-lg text-gray-500 font-light leading-relaxed mb-8">
+        Ogni pietra del Castello di Muggia racconta una storia secolare. Situato in una posizione strategica che domina il Golfo di Trieste, oggi apre le sue porte a chi cerca un luogo dove il tempo sembra essersi fermato. Nel rispetto rigoroso della privacy e dell'ecosistema circostante.
+      </p>
+    </div>
+  </section>
+
+</Layout>

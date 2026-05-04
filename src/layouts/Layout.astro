@@ -1,0 +1,104 @@
+---
+import '../styles/global.css';
+import { getLangFromUrl, useTranslations } from '@i18n/utils';
+import { SITE_URL } from '@core/constants';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+// Default per SEO
+const { 
+  title, 
+  description = "Scopri il Castello di Muggia: mille anni di storia affacciati sul Golfo di Trieste. Prenota la tua visita, organizza eventi privati o scopri la nostra bottega.", 
+  image = "/og-image.jpg" 
+} = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const canonicalURL = new URL(Astro.url.pathname, SITE_URL);
+---
+
+<!doctype html>
+<html lang={lang} data-theme="lofi" class="scroll-smooth">
+  <head>
+    <!-- Metadati base -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | {t('site.title')}</title>
+    <meta name="description" content={description} />
+    
+    <!-- SEO & OpenGraph -->
+    <link rel="canonical" href={canonicalURL} />
+    <meta property="og:title" content={`${title} | ${t('site.title')}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, SITE_URL)} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'it' ? 'it_IT' : lang === 'fr' ? 'fr_FR' : 'de_DE'} />
+    
+    <!-- Hreflang Tags per SEO Multilingua (Google Best Practice) -->
+    <link rel="alternate" hreflang="it" href={`${SITE_URL}/it/`} />
+    <link rel="alternate" hreflang="fr" href={`${SITE_URL}/fr/`} />
+    <link rel="alternate" hreflang="de" href={`${SITE_URL}/de/`} />
+    <link rel="alternate" hreflang="x-default" href={`${SITE_URL}/it/`} /> <!-- Fallback per lingue non supportate -->
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="min-h-screen flex flex-col bg-[#F9F9F8] text-[#2C2A29] antialiased selection:bg-[#8C6A4F] selection:text-white">
+    
+    <!-- Navbar Effetto Glassmorphism (Stile Apple/Premium) -->
+    <header class="fixed top-0 w-full z-50 transition-all duration-300 glass-panel border-b-0 shadow-sm">
+      <div class="navbar max-w-7xl mx-auto px-4 lg:px-8 h-20">
+        <div class="flex-1">
+          <a href={`/${lang}/`} class="text-2xl font-bold tracking-tighter text-[#2C2A29] hover:opacity-70 transition-opacity">
+            {t('site.title')}
+          </a>
+        </div>
+        <div class="flex-none gap-2 hidden md:flex">
+          <ul class="menu menu-horizontal px-1 font-medium text-sm tracking-wide">
+            <li><a href={`/${lang}/`} class="hover:bg-transparent hover:text-[#8C6A4F] transition-colors">{t('nav.home')}</a></li>
+            <li><a href={`/${lang}/storia`} class="hover:bg-transparent hover:text-[#8C6A4F] transition-colors">{t('nav.about')}</a></li>
+            <li><a href={`/${lang}/contatti`} class="hover:bg-transparent hover:text-[#8C6A4F] transition-colors">{t('nav.contact')}</a></li>
+          </ul>
+        </div>
+        <div class="flex-none">
+          <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-sm font-semibold tracking-wider">
+              {lang.toUpperCase()}
+            </div>
+            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-xl glass-panel rounded-box w-32 mt-4">
+              <li><a href="/it/" class="hover:bg-[#8C6A4F]/10">Italiano</a></li>
+              <li><a href="/fr/" class="hover:bg-[#8C6A4F]/10">Français</a></li>
+              <li><a href="/de/" class="hover:bg-[#8C6A4F]/10">Deutsch</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Spacer per compensare la navbar fixed -->
+    <div class="h-20"></div>
+
+    <main class="flex-grow">
+      <slot />
+    </main>
+
+    <!-- Footer minimal ed elegante -->
+    <footer class="footer footer-center p-12 bg-[#2C2A29] text-white mt-auto">
+      <aside>
+        <p class="font-light tracking-wide opacity-70">
+          Copyright © {new Date().getFullYear()} - {t('site.title')}
+        </p>
+        <div class="flex gap-4 mt-4 opacity-50">
+          <a href={`/${lang}/privacy`} class="hover:opacity-100 transition-opacity">Privacy Policy</a>
+          <span>|</span>
+          <a href={`/${lang}/cookie`} class="hover:opacity-100 transition-opacity">Cookie Policy</a>
+        </div>
+      </aside>
+    </footer>
+  </body>
+</html>

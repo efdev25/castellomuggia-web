@@ -1,0 +1,27 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { getLangFromUrl, useTranslations } from '@i18n/utils';
+import { getCollection } from 'astro:content';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Recuperiamo tutti gli articoli della storia per la lingua corrente
+const allStoria = await getCollection('storia');
+const storiaLang = allStoria.filter(entry => entry.id.startsWith(`${lang}/`)).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout title={t('nav.about')}>
+  <div class="max-w-4xl mx-auto py-12 px-4">
+    <h1 class="text-4xl font-bold mb-8 text-center">{t('nav.about')}</h1>
+    
+    <div class="grid gap-8">
+      {storiaLang.map((entry) => (
+        <article 
+          class="prose lg:prose-xl max-w-none bg-base-100 p-8 rounded-box shadow-lg" 
+          set:html={entry.rendered?.html} 
+        />
+      ))}
+    </div>
+  </div>
+</Layout>

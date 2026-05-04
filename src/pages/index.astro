@@ -1,0 +1,6 @@
+---
+// Questa rotta funge da entry point generico.
+// Il middleware.ts ridirigerà automaticamente l'utente a /it/ o /fr/ ecc. in base ad Accept-Language.
+// Mettiamo questo redirect esplicito come fallback di sicurezza.
+return Astro.redirect('/it/');
+---

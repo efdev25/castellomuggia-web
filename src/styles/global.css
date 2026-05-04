@@ -1,0 +1,57 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* Variabili e Colori Premium (Palette Neutra e Lussuosa) */
+@theme {
+  --color-primary: #8C6A4F; /* Oro antico/Rame per richiamare la pietra e l'eleganza */
+  --color-primary-focus: #6E533D;
+  --color-base-100: #F9F9F8; /* Bianco crema */
+  --color-base-200: #F2EFE9; /* Crema scuro */
+  --color-base-content: #2C2A29; /* Grigio quasi nero per alta leggibilità */
+}
+
+/* Base e Font Self-Hosted (Fallback a system fonts ottimizzati finché non scarichiamo i woff2) */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.03em;
+}
+
+/* Micro-animazioni Premium */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+
+/* Effetto Glassmorphism Premium */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Overlay per sfondi scuri */
+.dark-glass-panel {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
