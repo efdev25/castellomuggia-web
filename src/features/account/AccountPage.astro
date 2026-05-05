@@ -1,0 +1,67 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { supabase } from '@adapters/supabase/client';
+import { getLangFromUrl } from '@i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+// Qui leggiamo il token dal cookie (che il middleware ha già confermato esistere)
+const accessToken = Astro.cookies.get('sb-access-token')?.value;
+const refreshToken = Astro.cookies.get('sb-refresh-token')?.value;
+
+let userEmail = "Caricamento...";
+
+if (accessToken && refreshToken) {
+  await supabase.auth.setSession({
+    access_token: accessToken,
+    refresh_token: refreshToken,
+  });
+  const { data } = await supabase.auth.getUser();
+  userEmail = data.user?.email || "Email non trovata";
+}
+---
+
+<Layout title="Il Mio Account">
+  <div class="bg-[#F9F9F8] min-h-screen py-16 px-4 md:px-8">
+    <div class="max-w-4xl mx-auto">
+      
+      <div class="flex items-center justify-between mb-12 animate-fade-in-up">
+        <h1 class="text-4xl font-bold text-[#2C2A29] tracking-tighter">Il Mio Profilo</h1>
+        <form action="/api/auth/logout" method="POST">
+          <button type="submit" class="btn btn-outline border-[#8C6A4F] text-[#8C6A4F] hover:bg-[#8C6A4F] hover:text-white rounded-full px-6">
+            Disconnetti
+          </button>
+        </form>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in-up delay-100">
+        
+        <!-- Info Utente -->
+        <div class="col-span-1">
+          <div class="card bg-white shadow-xl rounded-2xl border border-gray-100 p-8">
+            <div class="w-16 h-16 bg-[#F2EFE9] rounded-full flex items-center justify-center text-[#8C6A4F] font-bold text-xl mb-4">
+              {userEmail.charAt(0).toUpperCase()}
+            </div>
+            <h3 class="text-lg font-bold text-[#2C2A29] mb-1">Dettagli Utente</h3>
+            <p class="text-gray-500 font-light text-sm truncate">{userEmail}</p>
+          </div>
+        </div>
+
+        <!-- Sezione Ordini -->
+        <div class="col-span-1 md:col-span-2">
+          <div class="card bg-white shadow-xl rounded-2xl border border-gray-100 p-8 h-full">
+            <h3 class="text-2xl font-bold text-[#2C2A29] mb-4">I Miei Ordini</h3>
+            <div class="flex flex-col items-center justify-center h-48 text-center bg-[#F9F9F8] rounded-xl border border-dashed border-gray-300">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-400 mb-3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+              </svg>
+              <p class="text-gray-500 font-light">Non hai ancora effettuato ordini.</p>
+              <a href={`/${lang}/bottega`} class="mt-4 text-[#8C6A4F] font-semibold hover:underline">Esplora la Bottega</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</Layout>

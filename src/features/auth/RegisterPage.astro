@@ -1,0 +1,78 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { supabase } from '@adapters/supabase/client';
+import { getLangFromUrl } from '@i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+let errorMsg = '';
+let successMsg = '';
+
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  const email = formData.get("email")?.toString();
+  const password = formData.get("password")?.toString();
+
+  if (email && password) {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      errorMsg = error.message;
+    } else {
+      successMsg = "Registrazione completata! Puoi ora effettuare il login.";
+    }
+  }
+}
+---
+
+<Layout title="Registrazione">
+  <div class="min-h-screen bg-cover bg-center flex items-center justify-center py-20 px-4 relative" style="background-image: url('https://images.unsplash.com/photo-1549880338-65ddcdfd017b?ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80');">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm z-0"></div>
+
+    <div class="card w-full max-w-md bg-white/90 backdrop-blur-xl shadow-2xl z-10 animate-fade-in-up">
+      <div class="card-body p-10">
+        <h2 class="text-3xl font-bold text-[#2C2A29] mb-2 tracking-tight text-center">Unisciti a Noi</h2>
+        <p class="text-gray-500 font-light text-center mb-8">Crea un account per i tuoi acquisti</p>
+
+        {errorMsg && (
+          <div class="alert alert-error mb-6 text-sm py-3 rounded-lg bg-red-100 text-red-800 border-none shadow-inner">
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
+        {successMsg ? (
+          <div class="text-center">
+            <div class="alert alert-success mb-6 text-sm py-3 rounded-lg bg-green-100 text-green-800 border-none shadow-inner">
+              <span>{successMsg}</span>
+            </div>
+            <a href={`/${lang}/login`} class="btn w-full bg-[#8C6A4F] hover:bg-[#6E533D] text-white border-none rounded-lg mt-4">Vai al Login</a>
+          </div>
+        ) : (
+          <form method="POST" class="space-y-6">
+            <div class="form-control">
+              <label class="label"><span class="label-text font-medium text-gray-700">Email</span></label>
+              <input type="email" name="email" required placeholder="tuo@indirizzo.com" class="input input-bordered w-full bg-white/50 focus:bg-white focus:border-[#8C6A4F] focus:ring-1 focus:ring-[#8C6A4F] transition-all" />
+            </div>
+            
+            <div class="form-control">
+              <label class="label"><span class="label-text font-medium text-gray-700">Password</span></label>
+              <input type="password" name="password" required placeholder="••••••••" class="input input-bordered w-full bg-white/50 focus:bg-white focus:border-[#8C6A4F] focus:ring-1 focus:ring-[#8C6A4F] transition-all" />
+            </div>
+
+            <button type="submit" class="btn w-full bg-[#8C6A4F] hover:bg-[#6E533D] text-white border-none rounded-lg font-medium text-lg mt-4 shadow-lg shadow-[#8C6A4F]/30 transition-all hover:-translate-y-0.5">
+              Registrati
+            </button>
+          </form>
+        )}
+
+        <div class="divider text-gray-400 font-light my-6">oppure</div>
+
+        <p class="text-center text-sm font-light text-gray-600">
+          Hai già un account? <a href={`/${lang}/login`} class="font-semibold text-[#8C6A4F] hover:underline">Accedi</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>

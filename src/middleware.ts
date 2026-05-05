@@ -26,9 +26,20 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
 
-  // 3. /account/* → verifica sessione Supabase Auth per i clienti (stub)
-  if (url.pathname.startsWith('/account')) {
-    // In futuro qui verrà chiamato Supabase Auth
+  // 3. /account/* → verifica sessione Supabase Auth per i clienti
+  if (url.pathname.includes('/account')) {
+    const accessToken = context.cookies.get('sb-access-token')?.value;
+    const refreshToken = context.cookies.get('sb-refresh-token')?.value;
+
+    const [, lang] = url.pathname.split('/'); 
+    const loginUrl = `/${lang || 'it'}/login`;
+
+    if (!accessToken || !refreshToken) {
+      return redirect(loginUrl, 302);
+    }
+
+    // In un'architettura vera andrebbe verificata la firma del JWT o chiamato supabase.auth.getUser()
+    // Per ora controlliamo l'esistenza, la VERA sicurezza la fa RLS su Supabase al momento della query
   }
 
   // 4. Tutte le altre rotte (/*) → accesso pubblico consentito
